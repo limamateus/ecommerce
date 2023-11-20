@@ -41,3 +41,31 @@ func BuscaProdutos() []Produto {
 	return produtos  // Retorno os produtos da lista
 
 }
+
+func CriarNovoProduto(nome, descricao string, quantidade int, preco float64) {
+	db := db.ConectandoComBanco()
+
+	insertProduto, err := db.Prepare("insert into produtos(nome,descricao,preco,quantidade)values($1,$2,$3,$4)")
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	insertProduto.Exec(nome, descricao, preco, quantidade)
+
+	defer db.Close()
+}
+
+func DeletarProduto(id string) {
+	db := db.ConectandoComBanco()
+
+	deletarProtudo, err := db.Prepare("delete from produtos where id = $1")
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	deletarProtudo.Exec(id)
+
+	defer db.Close()
+}
